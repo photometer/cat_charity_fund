@@ -9,6 +9,7 @@ from app.services.investment import close_investment
 async def check_charity_project_exists(
     project_id: int, session: AsyncSession
 ) -> CharityProject:
+    """Проверка наличия проекта по id."""
     project = await charity_project_crud.get(project_id, session)
     if project is None:
         raise HTTPException(status_code=404, detail='Проект не найден!')
@@ -18,6 +19,7 @@ async def check_charity_project_exists(
 async def check_name_duplicate(
     project_name: str, session: AsyncSession
 ) -> None:
+    """Проверка уникальности названия проекта."""
     project_id = await charity_project_crud.get_project_id_by_name(
         project_name, session
     )
@@ -28,6 +30,7 @@ async def check_name_duplicate(
 
 
 def check_project_fully_invested(project: CharityProject) -> None:
+    """Проверить, закрыт ли проект."""
     if project.fully_invested:
         raise HTTPException(
             status_code=400, detail='Закрытый проект нельзя редактировать!'
@@ -35,6 +38,7 @@ def check_project_fully_invested(project: CharityProject) -> None:
 
 
 def check_project_is_invested(project: CharityProject) -> None:
+    """Проверить, вложены ли средства в проект."""
     if project.invested_amount > 0:
         raise HTTPException(
             status_code=400,
@@ -45,6 +49,7 @@ def check_project_is_invested(project: CharityProject) -> None:
 def check_full_amount(
     project: CharityProject, full_amount: int
 ) -> CharityProject:
+    """Проверка корректности изменений для поля full_amount."""
     if full_amount < project.invested_amount:
         raise HTTPException(
             status_code=400,

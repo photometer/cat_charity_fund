@@ -27,6 +27,7 @@ router = APIRouter()
 async def get_all_charity_projects(
     session: AsyncSession = Depends(get_async_session)
 ):
+    """Получить список всех проектов."""
     return await charity_project_crud.get_multi(session)
 
 
@@ -40,7 +41,7 @@ async def create_new_charity_project(
     charity_project: CharityProjectCreate,
     session: AsyncSession = Depends(get_async_session),
 ):
-    """Только для суперюзеров."""
+    """Создать проект (только для суперюзеров)."""
     await check_name_duplicate(charity_project.name, session)
     new_project = await charity_project_crud.create(charity_project, session)
     await investment(new_project, donation_crud, session)
@@ -55,6 +56,7 @@ async def create_new_charity_project(
 async def remove_charity_project(
     project_id: int, session: AsyncSession = Depends(get_async_session)
 ):
+    """Удалить неинвестируемый проект (только для суперпользователей)."""
     charity_project = await check_charity_project_exists(project_id, session)
     check_project_is_invested(charity_project)
     charity_project = await charity_project_crud.remove(
@@ -73,7 +75,7 @@ async def partially_update_charity_project(
     obj_in: CharityProjectUpdate,
     session: AsyncSession = Depends(get_async_session),
 ):
-    """Только для суперюзеров."""
+    """Редактировать незакрытй проект (только для суперюзеров)."""
     charity_project = await check_charity_project_exists(project_id, session)
     check_project_fully_invested(charity_project)
     if obj_in.name is not None:

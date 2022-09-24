@@ -20,8 +20,10 @@ router = APIRouter()
 async def create_donation(
     reservation: DonationCreate,
     session: AsyncSession = Depends(get_async_session),
+    # только для авторизованных пользователей
     user: User = Depends(current_user),
 ):
+    """Создать пожертвование."""
     new_donation = await donation_crud.create(reservation, session, user)
     await investment(new_donation, charity_project_crud, session)
     return new_donation
@@ -36,14 +38,15 @@ async def create_donation(
 async def get_all_donations(
     session: AsyncSession = Depends(get_async_session)
 ):
-    """Только для суперюзеров."""
+    """Получить список всех пожертвований (только для суперюзеров)."""
     return await donation_crud.get_multi(session)
 
 
 @router.get('/my', response_model=List[DonationMyDB])
 async def get_my_donations(
     session: AsyncSession = Depends(get_async_session),
+    # только для авторизованных пользователей
     user: User = Depends(current_user)
 ):
-    """Получает список всех пожертвований для текущего пользователя."""
+    """Получить список всех пожертвований для текущего пользователя."""
     return await donation_crud.get_by_user(session=session, user=user)
