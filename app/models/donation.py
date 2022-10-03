@@ -4,11 +4,11 @@ from .base import CharityBase
 
 
 class Donation(CharityBase):
-    """Модель пожертвований."""
+    """Donations model."""
     user_id = Column(Integer, ForeignKey('user.id'))
     comment = Column(Text)
 
     def __repr__(self):
         return (
-            f'№{self.id}. Вложено: {self.invested_amount}/{self.full_amount}'
+            f'№{self.id}. Invested: {self.invested_amount}/{self.full_amount}'
         )

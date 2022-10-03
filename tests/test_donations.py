@@ -18,15 +18,15 @@ import pytest
 def test_create_donation(user_client, json, keys, expected_data):
     response = user_client.post('/donation/', json=json)
     assert response.status_code == 200, (
-        'При создании пожертвования должен возвращаться статус-код 200.'
+        'When creating a donation, the status code 200 should be returned.'
     )
     data = response.json()
     assert sorted(list(data.keys())) == sorted(keys), (
-        f'При создании пожертвования в ответе должны быть ключи `{keys}`.'
+        f'When creating a donation, response must contain `{keys}` keys.'
     )
     data.pop('create_date')
     assert data == expected_data, (
-        'При создании пожертвования тело ответа API отличается от ожидаемого.'
+        'When creating a donation, API response body is different from expected.'
     )
 
 
@@ -42,22 +42,22 @@ def test_create_donation(user_client, json, keys, expected_data):
 def test_create_donation_incorrect(user_client, json):
     response = user_client.post('/donation/', json=json)
     assert response.status_code == 422, (
-        'При некорректном теле POST-запроса к эндпоинту `/donation/` '
-        'должен вернуться статус-код 422.'
+        'In case of incorrect POST request body to the `/donation/` endpoint '
+        'status code 422 should be returned.'
     )
 
 
 def test_get_user_donation(user_client, donation):
     response = user_client.get('/donation/my')
     assert response.status_code == 200, (
-        'При получении списка пожертвований пользователя должен вернуться статус-код 200.'
+        'When receiving a list of user donations, the status code 200 should be returned.'
     )
     assert isinstance(response.json(), list), (
-        'При получении списка пожертвований пользователя должен возвращаться объект типа `list`.'
+        'When receiving a list of user donations, an object of type `list` should be returned.'
     )
     assert len(response.json()) == 1, (
-        'При корректном POST-запросе к эндпоинту `/charity_project/` не создаётся объект в БД.'
-        'Проверьте модель `Donation`.'
+        'With a correct POST request to the `/charity_project/` endpoint, an object is not created in the database.'
+        'Check `Donation` model.'
     )
     data = response.json()[0]
     keys = sorted([
@@ -67,27 +67,27 @@ def test_get_user_donation(user_client, donation):
         'create_date',
     ])
     assert sorted(list(data.keys())) == keys, (
-        f'При получении списка пожертвований пользователя в ответе должны быть ключи `{keys}`.'
+        f'When receiving a list of user donations, response should contain the `{keys}` keys.'
     )
     assert response.json() == [{
         'comment': 'To you for chimichangas',
         'create_date': '2011-11-11T00:00:00',
         'full_amount': 100,
         'id': 1,
-    }], 'При получении списка пожертвований пользователя тело ответа API отличается от ожидаемого.'
+    }], 'When receiving a list of user donations, API response body is different from expected.'
 
 
 def test_get_all_donations(superuser_client, donation, another_donation):
     response = superuser_client.get('/donation/')
     assert response.status_code == 200, (
-        'При получении списка всех пожертвований должен возвращаться статус-код 200.'
+        'When receiving a list of all donations, status code 200 should be returned.'
     )
     assert isinstance(response.json(), list), (
-        'При получении списка всех пожертвований должен возвращаться объект типа `list`.'
+        'When receiving a list of all donations, an object of type `list` should be returned.'
     )
     assert len(response.json()) == 2, (
-        'При корректном POST-запросе к эндпоинту `/charity_project/` не создаётся объект в БД. '
-        'Проверьте модель `Donation`.'
+        'With a correct POST request to the `/charity_project/` endpoint, an object is not created in the database. '
+        'Check `Donation` model.'
     )
     data = response.json()[0]
     keys = sorted([
@@ -100,7 +100,7 @@ def test_get_all_donations(superuser_client, donation, another_donation):
         'fully_invested',
     ])
     assert sorted(list(data.keys())) == keys, (
-        f'При получении списка всех пожертвований в ответе должны быть ключи `{keys}`.'
+        f'When receiving a list of all donations, response must contain `{keys}` keys.'
     )
     data = response.json()
     assert data == [
@@ -122,7 +122,7 @@ def test_get_all_donations(superuser_client, donation, another_donation):
             'invested_amount': 0,
             'fully_invested': False,
         }
-    ], 'При получении списка всех пожертвований тело ответа API отличается от ожидаемого.'
+    ], 'When receiving a list of all donations, API response body is different from expected.'
 
 
 @pytest.mark.parametrize('json', [
@@ -134,41 +134,41 @@ def test_get_all_donations(superuser_client, donation, another_donation):
 def test_donation_invalid(user_client, json):
     response = user_client.post('/donation/', json=json)
     assert response.status_code == 422, (
-        'Сумма пожертвований должна быть целочисленной и больше 0. '
-        'Статус-код должен быть 422.'
+        'Donation amount must be an integer and greater than 0. '
+        'Status code should be 422.'
     )
 
 
 def test_donation_superuser_UD_enpoints(superuser_client, donation):
     response = superuser_client.patch('/donation/1')
     assert response.status_code == 404, (
-        'Суперпользователь не может редактировать пожертвования'
+        'Superuser cannot edit donations'
     )
     response = superuser_client.delete('/donation/1')
     assert response.status_code == 404, (
-        'Суперпользователю должно быть запрещено удалять пожертвования'
+        'Superuser should be prevented from deleting donations'
     )
 
 
 def test_donation_auth_user_UD_enpoints(user_client, donation):
     response = user_client.patch('/donation/1')
     assert response.status_code == 404, (
-        'Зарегистрированному пользователю должно быть запрещено редактировать пожертвования'
+        'Registered user should not be allowed to edit donations'
     )
     response = user_client.delete('/donation/1')
     assert response.status_code == 404, (
-        'Зарегистрированному пользователю должно быть запрещено удалять пожертвования'
+        'Registered user should not be allowed to delete donations'
     )
 
 
 def test_donation_user_UD_enpoints(test_client, donation):
     response = test_client.patch('/donation/1')
     assert response.status_code == 404, (
-        'Незарегистрированному пользователю должно быть запрещено редактировать пожертвования'
+        'Unregistered user should not be allowed to edit donations'
     )
     response = test_client.delete('/donation/1')
     assert response.status_code == 404, (
-        'Незарегистрированному пользователю должно быть запрещено удалять пожертвования'
+        'Unregistered user should not be allowed to delete donations'
     )
 
 
@@ -176,5 +176,5 @@ def test_create_donation_check_create_date(user_client):
     response_1 = user_client.post('/donation/', json={'full_amount': 10})
     response_2 = user_client.post('/donation/', json={'full_amount': 20})
     assert response_1.json()['create_date'] != response_2.json()['create_date'], (
-        'При создании двух пожертвований с паузой (в 1 секунду, например) у них должны быть разные `create_date`'
+        'When creating 2 donations with a pause (of 1 second, for example), they must have different `create_date`'
     )

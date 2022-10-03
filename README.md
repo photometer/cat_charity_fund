@@ -1,90 +1,82 @@
-# Приложение QRKot
+# QRKot service
 
-Учебный проект в рамках курса Яндекс.Практикум
+The app for the QRKot Cat Chariy Fund allows to enter information about 
+donations to the foundation (without initializing the payment). Each user 
+can make a donation and accompany it with a comment. Donations are not 
+targeted: they are made to the fund, not to a specific project. Each donation 
+received is automatically added to the first open project that has not yet 
+collected the required amount. If the donation is more than the required 
+amount, or if there are no open projects in the Fund, the remaining money 
+is waiting for the opening of the next project. When creating a new project, 
+all uninvested donations are automatically invested in the new project.
 
----
+Several target projects can be opened in the QRKot Fund. Each project has 
+a name, description and amount to be raised. After the required amount is 
+collected, the project is closed and cannot be deleted and cannot be changed.
 
-## Описание
-
-Приложение для благотворительного фонда поддержки котиков QRKot позволяет 
-вносить информацию о пожертвованиях в фонд (без инициализации платежа). 
-Каждый пользователь может сделать пожертвование и сопроводить его 
-комментарием. Пожертвования не целевые: они вносятся в фонд, а не в 
-конкретный проект. Каждое полученное пожертвование автоматически добавляется 
-в первый открытый проект, который ещё не набрал нужную сумму. Если 
-пожертвование больше нужной суммы или же в Фонде нет открытых проектов — 
-оставшиеся деньги ждут открытия следующего проекта. При создании нового 
-проекта все неинвестированные пожертвования автоматически вкладываются в 
-новый проект.
-
-В Фонде QRKot может быть открыто несколько целевых проектов. У каждого 
-проекта есть название, описание и сумма, которую планируется собрать. 
-После того, как нужная сумма собрана — проект закрывается и не может быть 
-удален и не подлежит изменениям.
-
-## Технологии
+## Technologies
 
 - Python 3.9;
 - FastAPI;
 - SQLite;
 - Alembic.
 
-## Установка и запуск проекта локально
-<details><summary> Инструкции </summary>
+## Installation and local launch
+<details><summary> Instructions </summary>
 
-- Клонировать репозиторий на локальную машину:
+- Clone the repository on local PC:
 
     ```bash
     git clone https://github.com/photometer/cat_charity_fund/
     ```
 
-- Cоздать и активировать виртуальное окружение в директории проекта:
+- Create and activate virtual environment in the project directory:
 
-    * Если у вас Linux/MacOS
+    * For Linux/MacOS
         ```bash
         python3 -m venv venv
         source venv/bin/activate
         ```
 
-    * Если у вас Windows
+    * For Windows
         ```bash
         python -m venv venv
         source venv/scripts/activate
         ```
 
-- В виртуальном окружении обновить менеджер пакетов `pip` и установить 
-необходимые зависимости (Windows):
+- Upgrade package manager `pip` in the virtual environment and install 
+necessary requirements (Windows):
 
     ```bash
     python -m pip install --upgrade pip
     pip install -r requirements.txt
     ```
 
-- Не забудьте создать файл `.env` и заполнить его:
+- Don't forget to create `.env` file and fill it up:
 
     ```py
-    APP_TITLE=Благотворительный фонд поддержки котиков QRKot
+    APP_TITLE=Cat charity fund QRKot
     DATABASE_URL=sqlite+aiosqlite:///./fastapi.db
     FIRST_SUPERUSER_EMAIL=user@example.com
     FIRST_SUPERUSER_PASSWORD=string
-    SECRET=<Ваш_секретный_ключ>
+    SECRET=<Your_secret_key>
     ```
 
-- Запустите проект локально:
+- Launch locally:
     ```bash
     uvicorn app.main:app --reload
     ```
 
 </details>
 
-## Примеры запросов к API
+## API request examples
 
-Спецификация проекта доступна в файле `openapi.json` в корневой директории 
-проекта. Для просмотра документации загрузите файл на 
-[сайт](https://redocly.github.io/redoc/). Вверху страницы есть кнопка 
-Upload a file, нажмите её и загрузите скачанный файл. Спецификация проекта 
-отобразится в формате ReDoc.
+Project specification is available in `openapi.json` file in the root 
+directory of the project. Download the file to view the documentation on 
+[site](https://redocly.github.io/redoc/). Push `Upload a file` button at 
+the top of the page and upnload the file. Project specification will be 
+displayed in the ReDoc format.
 
-## Автор
+## Author
 
-[Лиза Андросова](https://github.com/photometer) :sparkles:
+[Liza Androsova](https://github.com/photometer) :sparkles:

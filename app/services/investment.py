@@ -11,7 +11,7 @@ CRUDType = TypeVar('CRUDType', bound=CRUDBase)
 
 
 def close_investment(obj: ModelType) -> None:
-    """Установка атрибутов для закрытого проекта/пожертвования."""
+    """Setting attributes for a closed project/donation."""
     obj.fully_invested = True
     obj.close_date = datetime.now()
 
@@ -20,8 +20,7 @@ async def investment(
     invest_from: ModelType, invest_in: CRUDType, session: AsyncSession
 ) -> ModelType:
     """
-    Процесс распределения пожертвований при создании нового
-    проекта/пожертвования.
+    Distributing donations process when creating a new project/donation.
     """
     objects = await invest_in.get_multi_open(session)
     for object in objects:
