@@ -1,6 +1,6 @@
 # QRKot service
 
-The app for the QRKot Cat Chariy Fund allows to enter information about 
+The app for the QRKot Cat Charity Fund allows to enter information about 
 donations to the foundation (without initializing the payment). Each user 
 can make a donation and accompany it with a comment. Donations are not 
 targeted: they are made to the fund, not to a specific project. Each donation 
